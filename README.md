@@ -1,16 +1,16 @@
 # DCC-Signaldekoder mit ATmega328
 
 ## Hardware
-Für die Ansteuerung von sechs Ausgängen für das gemeinsame Schalten eines Haupt- und Vorsignals wurde eine [Leiterplatte](https://simandit.de/simwiki/doku.php?id=modellbahn:umbauten:dcc-dekoder#dcc-signal-dekoder_mit_atmega328) entwickelt, mit der die Anschaltung an das Gleissignal erfolgt. Mit Transistoren für die Funktionsausgänge wird die gleichgerichtete Gleisspannung geschaltet. Zur Erzeugung des ACK-Signals ist ein Anschluss vorgesehen, der während des Lesens der CVs verbunden werden kann. Schreiben ist auch ohne diesen möglich.\
+Um das gemeinsame Schalten, insbesondere das synchrone Blinken von Haupt- und Vorsignal zu erreichen, wurde für den Dekoder eine [Leiterplatte](https://simandit.de/simwiki/doku.php?id=modellbahn:umbauten:dcc-dekoder#dcc-signal-dekoder_mit_atmega328) mit einem ATmega328 und sechs PWM-Ausgängen entwickelt, mit der die Anschaltung an das DCC-Gleissignal erfolgt. Mit Transistoren für die Funktionsausgänge wird die gleichgerichtete Gleisspannung geschaltet. Zur Erzeugung des ACK-Signals ist ein Anschluss vorgesehen, der während des Lesens der CVs verbunden werden kann. Schreiben ist auch ohne diesen möglich.\
 
-Diese Platine wird über einen ISP-Programmer programmiert.
+Diese Platine wird mit einem ISP-Programmer programmiert.
 
 ## Software
 Der Arduino-Sketch verwendet die [NmraDcc-Bibliothek](https://github.com/mrrwa/NmraDcc) von [MRRWA](http://mrrwa.org/), die über die Arduino-Bibliotheksverwaltung eingebunden werden kann.
 
 Es wird das erweiterte DCC-Paket-Format für Zubehör - Extended Accessory Decoder Control Packet Format - verwendet. Damit sind in den meisten Systemen, z.B. DCC-Ex, 32 Signalbegriffe möglich.
 
-Folgende HL-Signal-Begriffe sind mit vier LEDs (statisch und blinkend) für Hauptsignale eine Nebenbahn-Strecke möglich:
+Folgende HL-Signal-Begriffe sind mit vier LEDs (statisch und blinkend) für EZMG-Hauptsignale einer DR-Nebenbahn-Strecke möglich:
 - Hp0  - Halt (Hl13)
 - Hl1  - Fahrt mit Streckenhöchstgeschwindigkeit
 - Hl3a - Fahrt mit 40 km/h, dann mit Streckenhöchstgeschwindigkeit
