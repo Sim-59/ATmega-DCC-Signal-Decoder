@@ -1,7 +1,7 @@
 # DCC-Signaldekoder mit ATmega328
 
 ## Hardware
-Um das gemeinsame Schalten, insbesondere das synchrone Blinken von Haupt- und Vorsignal zu erreichen, wurde für den Dekoder eine [Leiterplatte](https://simandit.de/simwiki/doku.php?id=modellbahn:umbauten:dcc-dekoder#dcc-signal-dekoder_mit_atmega328) mit einem ATmega328 und sechs PWM-Ausgängen entwickelt, mit der die Anschaltung an das DCC-Gleissignal erfolgt.\ 
+Um das gemeinsame Schalten, insbesondere das synchrone Blinken von Haupt- und Vorsignal zu erreichen, wurde ausgehend von der [4-Port-Variante](https://simandit.de/simwiki/doku.php?id=modellbahn:umbauten:dcc-dekoder#multi-funktions-dekoder_4-port) des DCC-Dekoders mit ATtiny85 eine neue [Leiterplatte](https://simandit.de/simwiki/doku.php?id=modellbahn:umbauten:dcc-dekoder#dcc-signal-dekoder_mit_atmega328) mit einem ATmega328 und sechs PWM-Ausgängen entwickelt, mit der die Anschaltung an das DCC-Gleissignal erfolgt.\
 Mit Transistoren für die Funktionsausgänge wird die gleichgerichtete Gleisspannung geschaltet. Zur Erzeugung des ACK-Signals ist ein Anschluss vorgesehen, der vorübergehend zum Lesens der CVs durch einen Schalter oder Jumper überbrückt werden kann. CV-Schreiben ist auch ohne diesen möglich.
 
 Diese Platine wird mit einem ISP-Programmer programmiert.
