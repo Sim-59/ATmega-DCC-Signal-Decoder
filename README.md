@@ -7,8 +7,8 @@ Diese Platine wird mit einem ISP-Programmer programmiert.
 
 ## Software
 Der Arduino-Sketch verwendet die [NmraDcc-Bibliothek](https://github.com/mrrwa/NmraDcc) von [MRRWA](http://mrrwa.org/), die über die Arduino-Bibliotheksverwaltung eingebunden werden kann.
-
 Es wird das erweiterte DCC-Paket-Format für Zubehör - Extended Accessory Decoder Control Packet Format - verwendet. Damit sind in den meisten Systemen, z.B. DCC-Ex, 32 Signalbegriffe möglich.
+Der Dekoder nutzt eine DCC-Zubehöradresse im Output-Address-Mode. 
 
 Folgende HL-Signal-Begriffe sind mit vier LEDs (statisch und blinkend) für EZMG-Hauptsignale einer DR-Nebenbahn-Strecke möglich:
 - Hp0  - Halt (Hl13)
