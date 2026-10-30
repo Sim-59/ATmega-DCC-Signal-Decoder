@@ -30,7 +30,7 @@ Diese Zuordnung der Vor- zu den Hauptsignalbegriffen wurde realisiert:
 
 Der Dekoder nutzt eine DCC-Zubehöradresse und den Output-Address-Mode. 
 
-In der Variante mit Dim-Einstellung der Lichtquellen wird die Helligkeit von 3 Ports mit PWM des ATtiny realisiert, bei PB3 wird das PWM in der Loop-Schleife realisiert. Für die Dim-Werte gibt es vier CVs mit 5 Bit (31 für maximale Helligkeit):
+Die Helligkeitseinstellung der Lichtquellen ist mit PWM-Dimmen des ATmega realisiert.
+Für das langsame Ein-/Ausschalten (Fade-In und Fade-Out) der Lichtquellen sind weitere Konfigurationsvariablen definiert.
 
-In der Variante mit Fade-In und Fade-Out sind für das langsame Ein-/Ausschalten der Lichtquellen weitere Konfigurationsvariablen definiert.
 
