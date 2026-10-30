@@ -14,7 +14,7 @@ Folgende HL-Signal-Begriffe sind mit vier LEDs (statisch und blinkend) für EZMG
 - Hp0  - Halt (Hl13)
 - Hl1  - Fahrt mit Streckenhöchstgeschwindigkeit
 - Hl3a - Fahrt mit 40 km/h, dann mit Streckenhöchstgeschwindigkeit
-- Hl7  - Geschwindigkeit auf 40 km/h ermäßigen (nur bei Vorsignal)
+- Hl7  - Geschwindigkeit auf 40 km/h ermäßigen (nur bei Vorsignalfunktion)
 - Hl9a - Fahrt mit 40 km/h, Fahrt mit 40 km/h erwarten
 - Hl10 - Halt erwarten
 - Hl12a - Fahrt mit 40 km/h, Halt erwarten
