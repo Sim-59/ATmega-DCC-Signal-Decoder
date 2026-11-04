@@ -8,7 +8,7 @@ Diese Platine wird mit einem ISP-Programmer programmiert.
 
 ## Software
 Der Arduino-Sketch verwendet die [NmraDcc-Bibliothek](https://github.com/mrrwa/NmraDcc) von [MRRWA](http://mrrwa.org/), die über die Arduino-Bibliotheksverwaltung eingebunden werden kann.
-Es wird das erweiterte DCC-Paket-Format für Zubehör - Extended Accessory Decoder Control Packet Format - verwendet. Damit sind in den meisten Systemen, z.B. DCC-Ex, 32 Signalbegriffe möglich.
+Es wird das erweiterte DCC-Paket-Format für Zubehör - Extended Accessory Decoder Control Packet Format - verwendet. Damit sind in den meisten Systemen, z.B. DCC-Ex, 32 Signalbegriffe möglich.\
 Der Dekoder nutzt eine DCC-Zubehöradresse im Output-Address-Mode. 
 
 Folgende HL-Signal-Begriffe sind mit vier LEDs (statisch und blinkend) für EZMG-Hauptsignale einer DR-Nebenbahn-Strecke möglich:
@@ -29,9 +29,7 @@ Diese Zuordnung der Vor- zu den Hauptsignalbegriffen wurde realisiert:
 - HL1 bei HL1, HL10
 - HL7 bei HL3a, HL9a, HL12a
 
-Der Dekoder nutzt eine DCC-Zubehöradresse und den Output-Address-Mode. 
-
-Die Helligkeitseinstellung der Lichtquellen ist mit PWM-Dimmen des ATmega realisiert.
+Eine Anpassung der Helligkeit der Lichtquellen kann durch Dimmen mit PWM der ATmega-Ports über Konfigurationsvariablen erfolgen.\
 Für das langsame Ein-/Ausschalten (Fade-In und Fade-Out) der Lichtquellen sind weitere Konfigurationsvariablen definiert.
 
 
