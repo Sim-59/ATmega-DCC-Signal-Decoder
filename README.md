@@ -1,10 +1,13 @@
 # DCC-Signaldekoder mit ATmega328
 ![description](https://github.com/Sim-59/ATmega-DCC-Signal-Decoder/blob/main/images/PCB_SigDec_01k.jpg)
+## Überblick
+Der **DCC-Signaldekoder** dient der Ansteuerung von Signalen mit den erweiterten Zubehör-Protokoll nach nach [NMRA s-9.2.1](https://www.nmra.org/sites/default/files/standards/sandrp/DCC/S/s-9.2.1_dcc_extended_packet_formats.pdf), Abs. 2.4.2.
+### Autor
+[Michael Hochmuth](https://github.com/Sim-59)
+
 ## Hardware
 Um das gemeinsame Schalten, insbesondere das synchrone Blinken von Haupt- und Vorsignal zu erreichen, wurde ausgehend von der [4-Port-Variante](https://simandit.de/simwiki/doku.php?id=modellbahn:umbauten:dcc-dekoder#multi-funktions-dekoder_4-port) des DCC-Dekoders mit ATtiny85 eine neue [Leiterplatte](https://simandit.de/simwiki/doku.php?id=modellbahn:umbauten:dcc-dekoder#dcc-signal-dekoder_mit_atmega328) mit einem ATmega328 und sechs PWM-Ausgängen entwickelt, mit der die Anschaltung an das DCC-Gleissignal erfolgt.\
-Mit Transistoren für die Funktionsausgänge wird die gleichgerichtete Gleisspannung geschaltet. Für LEDs sind Bestückungsplätze für Vorwiderstände vorhanden. Zur Erzeugung des ACK-Signals ist ein Anschluss vorgesehen, der vorübergehend zum Lesens der CVs durch einen Schalter oder Jumper überbrückt werden kann. CV-Schreiben ist auch ohne diesen möglich.
-
-Diese Platine wird mit einem ISP-Programmer programmiert.
+Mit Transistoren für die Funktionsausgänge wird die gleichgerichtete Gleisspannung geschaltet. Die Funktionsausgänge unterstützen Dimmen und Fade-In und FadeOut sowie Blinken. Für LEDs sind Bestückungsplätze für Vorwiderstände vorhanden. Zur Erzeugung des ACK-Signals ist ein Anschluss vorgesehen, der vorübergehend zum Lesens der CVs durch einen Schalter oder Jumper überbrückt werden kann. CV-Schreiben ist auch ohne diesen möglich.
 
 ## Software
 Der Arduino-Sketch verwendet die [NmraDcc-Bibliothek](https://github.com/mrrwa/NmraDcc) von [MRRWA](http://mrrwa.org/), die über die Arduino-Bibliotheksverwaltung eingebunden werden kann.
@@ -32,4 +35,6 @@ Diese Zuordnung der Vor- zu den Hauptsignalbegriffen wurde realisiert:
 Eine Anpassung der Helligkeit der Lichtquellen kann durch Dimmen mit PWM der ATmega-Ports über Konfigurationsvariablen erfolgen.\
 Für das langsame Ein-/Ausschalten (Fade-In und Fade-Out) der Lichtquellen sind weitere Konfigurationsvariablen definiert.
 
-
+## Installation
+Die Platine wird in der Arduino-IDE mit einem ISP-Programmer programmiert. Dafür sind an einer Seite Kontaktflächen angeordnet. Als erstes wird ein Bootloader programmiert. Die Vorgehensweise ist auf dieser [Wiki-Seite](https://simandit.de/simwiki/doku.php?id=weiteres:arduino:bootloader#atmega328) beschrieben.
+Weitere Informationen sind in der Dokumentation beschrieben.
