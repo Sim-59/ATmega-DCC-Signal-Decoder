@@ -1,5 +1,5 @@
 // DCC extended Accessories decoder for simple HL-signals (EZMG) of DR (ESig und VSig) with ATmega328
-// (c) Michael Hochmuth https://github.com/Sim-59                                2026-11-03
+// (c) Michael Hochmuth https://github.com/Sim-59                                2026-11-18
 // 6 output ports with PWM
 // CV reading at programming track (PT) is possible with a temporarily circuit for 60 mA load at one port
 //
@@ -123,7 +123,11 @@ struct CVPair {
 
 int AccDecoderAddr, cv_blink_period;
 bool ProgModeActivated = false;
+bool Blink_out1 = false;
+bool Blink_out2 = false;
 bool Blink_out3 = false;
+bool Blink_out4 = false;
+bool Blink_out5 = false;
 bool Blink_out6 = false;
 uint8_t cv_out1_dim, cv_out2_dim, cv_out3_dim, cv_out4_dim;
 uint8_t cv_out5_dim, cv_out6_dim;
@@ -142,6 +146,8 @@ bool fadePause = false;
 bool out1_on = false;
 bool out2_on = false;
 bool out3_on = false;
+bool out4_on = false;
+bool out5_on = false;
 bool out6_on = false;
 bool out1_fadeIn = false;
 bool out1_fadeOut = false;
@@ -156,8 +162,8 @@ bool out5_fadeIn = false;
 bool out5_fadeOut = false;
 bool out6_fadeIn = false;
 bool out6_fadeOut = false;
-uint8_t out2_fade = 0;
 uint8_t out1_fade = 0;
+uint8_t out2_fade = 0;
 uint8_t out3_fade = 0;
 uint8_t out4_fade = 0;
 uint8_t out5_fade = 0;
@@ -199,7 +205,10 @@ void Run_HL_ASPECT( uint16_t SIGN_addr, uint8_t SIGN_aspect ) {
       out4_fadeOutSet = true;
       out4_fadeIn = false;
       fadePause = true;
+      Blink_out1 = false;
+      Blink_out2 = false;
       Blink_out3 = false;
+      Blink_out4 = false;
 
       out5_fadeOut = true;             // VSig zeigt HL10
       out5_fadeOutSet = true;
@@ -207,6 +216,7 @@ void Run_HL_ASPECT( uint16_t SIGN_addr, uint8_t SIGN_aspect ) {
       out6_fadeIn = true;
       out6_fadeInSet = true;
       out6_fadeOut = false;
+      Blink_out5 = false;
       Blink_out6 = false;
 
       #if defined DEBUG  
@@ -228,7 +238,10 @@ void Run_HL_ASPECT( uint16_t SIGN_addr, uint8_t SIGN_aspect ) {
       out4_fadeOutSet = true;
       out4_fadeIn = false;
       fadePause = true;
+      Blink_out1 = false;
+      Blink_out2 = false;
       Blink_out3 = false;
+      Blink_out4 = false;
 
       out5_fadeIn = true;             // VSig zeigt HL1
       out5_fadeInSet = true;
@@ -236,6 +249,7 @@ void Run_HL_ASPECT( uint16_t SIGN_addr, uint8_t SIGN_aspect ) {
       out6_fadeOut = true;
       out6_fadeOutSet = true;
       out6_fadeIn = false;
+      Blink_out5 = false;
       Blink_out6 = false;
 
       #if defined DEBUG  
@@ -257,7 +271,10 @@ void Run_HL_ASPECT( uint16_t SIGN_addr, uint8_t SIGN_aspect ) {
       out4_fadeInSet = true;
       out4_fadeOut = false;
       fadePause = true;
+      Blink_out1 = false;
+      Blink_out2 = false;
       Blink_out3 = false;
+      Blink_out4 = false;
 
       out5_fadeOut = true;            // VSig zeigt HL7 z.B. bei BkSig, sonst unüblich (Bsp. Silberhausen Abzw.)
       out5_fadeOutSet = true;
@@ -265,6 +282,7 @@ void Run_HL_ASPECT( uint16_t SIGN_addr, uint8_t SIGN_aspect ) {
       out6_fadeIn = true;
       out6_fadeInSet = true;
       out6_fadeOut = false;
+      Blink_out5 = false;
       Blink_out6 = true;
       out6_on = false;                // damit beim ersten Aufruf im Blinkmode "ein" erfolgt
 
@@ -286,7 +304,10 @@ void Run_HL_ASPECT( uint16_t SIGN_addr, uint8_t SIGN_aspect ) {
       out4_fadeOut = true;
       out4_fadeOutSet = true;
       out4_fadeIn = false;
+      Blink_out1 = false;
+      Blink_out2 = false;
       Blink_out3 = true;
+      Blink_out4 = false;
       fadePause = true;
       out3_on = false;                // damit beim ersten Aufruf im Blinkmode "ein" erfolgt
 
@@ -296,6 +317,7 @@ void Run_HL_ASPECT( uint16_t SIGN_addr, uint8_t SIGN_aspect ) {
       out6_fadeIn = true;
       out6_fadeInSet = true;
       out6_fadeOut = false;
+      Blink_out5 = false;
       Blink_out6 = true;
       out6_on = false;                // damit beim ersten Aufruf im Blinkmode "ein" erfolgt
 
@@ -318,7 +340,10 @@ void Run_HL_ASPECT( uint16_t SIGN_addr, uint8_t SIGN_aspect ) {
       out4_fadeInSet = true;
       out4_fadeOut = false;
       fadePause = true;
+      Blink_out1 = false;
+      Blink_out2 = false;
       Blink_out3 = true;
+      Blink_out4 = false;
       out3_on = false;                // damit beim ersten Aufruf im Blinkmode "ein" erfolgt
 
       out5_fadeOut = true;            // VSig zeigt HL7
@@ -327,6 +352,7 @@ void Run_HL_ASPECT( uint16_t SIGN_addr, uint8_t SIGN_aspect ) {
       out6_fadeIn = true;
       out6_fadeInSet = true;
       out6_fadeOut = false;
+      Blink_out5 = false;
       Blink_out6 = true;
       out6_on = false;                // damit beim ersten Aufruf im Blinkmode "ein" erfolgt
 
@@ -349,7 +375,10 @@ void Run_HL_ASPECT( uint16_t SIGN_addr, uint8_t SIGN_aspect ) {
       out4_fadeOutSet = true;
       out4_fadeIn = false;
       fadePause = true;
+      Blink_out1 = false;
+      Blink_out2 = false;
       Blink_out3 = false;
+      Blink_out4 = false;
 
       out5_fadeIn = true;             // wenn es ESig, dann zeigt Vorsignal HL1
       out5_fadeInSet = true;
@@ -357,6 +386,7 @@ void Run_HL_ASPECT( uint16_t SIGN_addr, uint8_t SIGN_aspect ) {
       out6_fadeOut = true;
       out6_fadeOutSet = true;
       out6_fadeIn = false;
+      Blink_out5 = false;
       Blink_out6 = false;
 
       #if defined DEBUG  
@@ -378,7 +408,10 @@ void Run_HL_ASPECT( uint16_t SIGN_addr, uint8_t SIGN_aspect ) {
       out4_fadeInSet = true;
       out4_fadeOut = false;
       fadePause = true;
+      Blink_out1 = false;
+      Blink_out2 = false;
       Blink_out3 = false;
+      Blink_out4 = false;
 
       out5_fadeOut = true;            // VSig zeigt HL7
       out5_fadeOutSet = true;
@@ -386,6 +419,7 @@ void Run_HL_ASPECT( uint16_t SIGN_addr, uint8_t SIGN_aspect ) {
       out6_fadeIn = true;
       out6_fadeInSet = true;
       out6_fadeOut = false;
+      Blink_out5 = false;
       Blink_out6 = true;
       out6_on = false;                // damit beim ersten Aufruf im Blinkmode "ein" erfolgt
 
@@ -410,7 +444,10 @@ void Run_HL_ASPECT( uint16_t SIGN_addr, uint8_t SIGN_aspect ) {
       out4_fadeOutSet = true;
       out4_fadeIn = false;
       fadePause = true;
+      Blink_out1 = false;
+      Blink_out2 = false;
       Blink_out3 = false;
+      Blink_out4 = false;
 
       out5_fadeOut = true;             // VSig zeigt HL10
       out5_fadeOutSet = true;
@@ -418,6 +455,7 @@ void Run_HL_ASPECT( uint16_t SIGN_addr, uint8_t SIGN_aspect ) {
       out6_fadeIn = true;
       out6_fadeInSet = true;
       out6_fadeOut = false;
+      Blink_out5 = false;
       Blink_out6 = false;
       
       #if defined DEBUG  
@@ -438,7 +476,10 @@ void Run_HL_ASPECT( uint16_t SIGN_addr, uint8_t SIGN_aspect ) {
       out4_fadeOut = true;
       out4_fadeOutSet = true;
       out4_fadeIn = false;
+      Blink_out1 = false;
+      Blink_out2 = false;
       Blink_out3 = false;
+      Blink_out4 = false;
 
       out5_fadeOut = true;             // VSig
       out5_fadeOutSet = true;
@@ -446,6 +487,7 @@ void Run_HL_ASPECT( uint16_t SIGN_addr, uint8_t SIGN_aspect ) {
       out6_fadeOut = true;
       out6_fadeOutSet = true;
       out6_fadeIn = false;
+      Blink_out5 = false;
       Blink_out6 = false;
 
       #if defined DEBUG  
@@ -865,6 +907,42 @@ void loop() {
   if(out6_fadeIn && !fadePause) out6_FadeIn();
   if(out6_fadeOut) out6_FadeOut();
 
+  // BlinkPort PORT1 red
+  if (cv_blink_period && Blink_out1) {
+    if (((currentPortMillis-startBlinkMillis) % (cv_blink_period*100)) < cv_blink_period*cv_blink_perc) {
+      if (out1_on == false) {
+        out1_fadeIn = true;
+        out1_fadeInSet = true;
+        out1_fadeOut = false;
+        out1_on = true;
+      }
+    } else {
+      if (out1_on == true) {
+        out1_fadeOut = true;
+        out1_fadeOutSet = true;
+        out1_fadeIn = false;
+        out1_on = false;
+      }
+    }
+  }
+  // BlinkPort PORT2 green
+  if (cv_blink_period && Blink_out2) {
+    if (((currentPortMillis-startBlinkMillis) % (cv_blink_period*100)) < cv_blink_period*cv_blink_perc) {
+      if (out2_on == false) {
+        out2_fadeIn = true;
+        out2_fadeInSet = true;
+        out2_fadeOut = false;
+        out2_on = true;
+      }
+    } else {
+      if (out2_on == true) {
+        out2_fadeOut = true;
+        out2_fadeOutSet = true;
+        out2_fadeIn = false;
+        out2_on = false;
+      }
+    }
+  }
   // BlinkPort PORT3 yellow top
   if (cv_blink_period && Blink_out3) {
     if (((currentPortMillis-startBlinkMillis) % (cv_blink_period*100)) < cv_blink_period*cv_blink_perc) {
@@ -880,6 +958,42 @@ void loop() {
         out3_fadeOutSet = true;
         out3_fadeIn = false;
         out3_on = false;
+      }
+    }
+  }
+  // BlinkPort PORT4 yellow bot
+  if (cv_blink_period && Blink_out4) {
+    if (((currentPortMillis-startBlinkMillis) % (cv_blink_period*100)) < cv_blink_period*cv_blink_perc) {
+      if (out4_on == false) {
+        out4_fadeIn = true;
+        out4_fadeInSet = true;
+        out4_fadeOut = false;
+        out4_on = true;
+      }
+    } else {
+      if (out4_on == true) {
+        out4_fadeOut = true;
+        out4_fadeOutSet = true;
+        out4_fadeIn = false;
+        out4_on = false;
+      }
+    }
+  }
+  // BlinkPort PORT5 green Vorsignal
+  if (cv_blink_period && Blink_out5) {
+    if (((currentPortMillis-startBlinkMillis) % (cv_blink_period*100)) < cv_blink_period*cv_blink_perc) {
+      if (out5_on == false) {
+        out5_fadeIn = true;
+        out5_fadeInSet = true;
+        out5_fadeOut = false;
+        out5_on = true;
+      }
+    } else {
+      if (out5_on == true) {
+        out5_fadeOut = true;
+        out5_fadeOutSet = true;
+        out5_fadeIn = false;
+        out5_on = false;
       }
     }
   }
