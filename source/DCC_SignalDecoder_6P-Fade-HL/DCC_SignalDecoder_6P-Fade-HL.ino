@@ -1,5 +1,5 @@
 // DCC extended Accessories decoder for simple HL-signals (EZMG) of DR (ESig und VSig) with ATmega328
-// (c) Michael Hochmuth https://github.com/Sim-59                                2026-11-18
+// (c) Michael Hochmuth https://github.com/Sim-59                                2026-11-23
 // 6 output ports with PWM
 // CV reading at programming track (PT) is possible with a temporarily circuit for 60 mA load at one port
 //
@@ -116,6 +116,24 @@ NmraDcc Dcc;
 #define CV_OUT5_DIM       55   // Dimm value
 #define CV_OUT6_DIM       56   // Dimm value
  
+#define RED_ON  out1_fadeIn = true; out1_fadeInSet = true; out1_fadeOut = false; Blink_out1 = false;
+#define RED_OFF out1_fadeOut = true; out1_fadeOutSet = true; out1_fadeIn = false; Blink_out1 = false;
+#define GREEN_ON out2_fadeIn = true; out2_fadeInSet = true; out2_fadeOut = false; Blink_out2 = false;
+#define GREEN_BLINK out2_fadeIn = true; out2_fadeInSet = true; out2_fadeOut = false; Blink_out2 = true; out2_on = false; // damit beim ersten Aufruf im Blinkmode "ein" erfolgt
+#define GREEN_OFF out2_fadeOut = true; out2_fadeOutSet = true; out2_fadeIn = false; Blink_out2 = false;
+#define YEL_TOP_ON out3_fadeIn = true; out3_fadeInSet = true; out3_fadeOut = false; Blink_out3 = false;
+#define YEL_TOP_BLINK out3_fadeIn = true; out3_fadeInSet = true; out3_fadeOut = false; Blink_out3 = true; out3_on = false; // damit beim ersten Aufruf im Blinkmode "ein" erfolgt
+#define YEL_TOP_OFF out3_fadeOut = true; out3_fadeOutSet = true; out3_fadeIn = false; Blink_out3 = false;
+#define YEL_BOT_ON out4_fadeIn = true; out4_fadeInSet = true; out4_fadeOut = false; Blink_out4 = false;
+#define YEL_BOT_OFF out4_fadeOut = true; out4_fadeOutSet = true; out4_fadeIn = false; Blink_out4 = false;
+
+#define VS_GREEN_ON out5_fadeIn = true; out5_fadeInSet = true; out5_fadeOut = false; Blink_out5 = false;
+#define VS_GREEN_BLINK out5_fadeIn = true; out5_fadeInSet = true; out5_fadeOut = false; Blink_out5 = true; out5_on = false; // damit beim ersten Aufruf im Blinkmode "ein" erfolgt
+#define VS_GREEN_OFF out5_fadeOut = true; out5_fadeOutSet = true; out5_fadeIn = false; Blink_out5 = false;
+#define VS_YELLOW_ON out6_fadeIn = true; out6_fadeInSet = true; out6_fadeOut = false; Blink_out6 = false;
+#define VS_YELLOW_BLINK out6_fadeIn = true; out6_fadeInSet = true; out6_fadeOut = false; Blink_out6 = true; out6_on = false; // damit beim ersten Aufruf im Blinkmode "ein" erfolgt
+#define VS_YELLOW_OFF out6_fadeOut = true; out6_fadeOutSet = true; out6_fadeIn = false; Blink_out6 = false;
+
 struct CVPair {
   uint16_t CV;
   uint8_t Value;
@@ -192,65 +210,29 @@ void Run_HL_ASPECT( uint16_t SIGN_addr, uint8_t SIGN_aspect ) {
 
     switch (SIGN_aspect) {
     case 0:                           // Hp0 (HL13) rot (ESig, ASig)
-      out1_fadeIn = true;
-      out1_fadeInSet = true;
-      out1_fadeOut = false;
-      out2_fadeOut = true;
-      out2_fadeOutSet = true;
-      out2_fadeIn = false;
-      out3_fadeOut = true;
-      out3_fadeOutSet = true;
-      out3_fadeIn = false;
-      out4_fadeOut = true;
-      out4_fadeOutSet = true;
-      out4_fadeIn = false;
+      RED_ON
+      GREEN_OFF
+      YEL_TOP_OFF
+      YEL_BOT_OFF
       fadePause = true;
-      Blink_out1 = false;
-      Blink_out2 = false;
-      Blink_out3 = false;
-      Blink_out4 = false;
-
-      out5_fadeOut = true;             // VSig zeigt HL10
-      out5_fadeOutSet = true;
-      out5_fadeIn = false;
-      out6_fadeIn = true;
-      out6_fadeInSet = true;
-      out6_fadeOut = false;
-      Blink_out5 = false;
-      Blink_out6 = false;
+                                      // VSig zeigt HL10
+      VS_GREEN_OFF
+      VS_YELLOW_ON
 
       #if defined DEBUG  
         Serial.println("Aspect 0");
       #endif
-
       break;
-    case 1:                           // HL1 grün - Strecken-Höchstgeschw. (VSig, ESig, ASig) / VSig zeigt HL1
-      out1_fadeOut = true;
-      out1_fadeOutSet = true;
-      out1_fadeIn = false;
-      out2_fadeIn = true;
-      out2_fadeInSet = true;
-      out2_fadeOut = false;
-      out3_fadeOut = true;
-      out3_fadeOutSet = true;
-      out3_fadeIn = false;
-      out4_fadeOut = true;
-      out4_fadeOutSet = true;
-      out4_fadeIn = false;
-      fadePause = true;
-      Blink_out1 = false;
-      Blink_out2 = false;
-      Blink_out3 = false;
-      Blink_out4 = false;
 
-      out5_fadeIn = true;             // VSig zeigt HL1
-      out5_fadeInSet = true;
-      out5_fadeOut = false;
-      out6_fadeOut = true;
-      out6_fadeOutSet = true;
-      out6_fadeIn = false;
-      Blink_out5 = false;
-      Blink_out6 = false;
+    case 1:                           // HL1 grün - Strecken-Höchstgeschw. (VSig, ESig, ASig) / VSig zeigt HL1
+      RED_OFF
+      GREEN_ON
+      YEL_TOP_OFF
+      YEL_BOT_OFF
+      fadePause = true;
+                                      // VSig zeigt HL1
+      VS_GREEN_ON
+      VS_YELLOW_OFF
 
       #if defined DEBUG  
         Serial.println("Aspect 1");
@@ -258,33 +240,14 @@ void Run_HL_ASPECT( uint16_t SIGN_addr, uint8_t SIGN_aspect ) {
       break;
 
     case 2:                           // HL3a grün-gelb - Fahrt 40 km/h, dann mit Strecken-Höchstgeschw. (ASig, BkSig)
-      out1_fadeOut = true;
-      out1_fadeOutSet = true;
-      out1_fadeIn = false;
-      out2_fadeIn = true;
-      out2_fadeInSet = true;
-      out2_fadeOut = false;
-      out3_fadeOut = true;
-      out3_fadeOutSet = true;
-      out3_fadeIn = false;
-      out4_fadeIn = true;
-      out4_fadeInSet = true;
-      out4_fadeOut = false;
+      RED_OFF
+      GREEN_ON
+      YEL_TOP_ON
+      YEL_BOT_OFF
       fadePause = true;
-      Blink_out1 = false;
-      Blink_out2 = false;
-      Blink_out3 = false;
-      Blink_out4 = false;
-
-      out5_fadeOut = true;            // VSig zeigt HL7 z.B. bei BkSig, sonst unüblich (Bsp. Silberhausen Abzw.)
-      out5_fadeOutSet = true;
-      out5_fadeIn = false;
-      out6_fadeIn = true;
-      out6_fadeInSet = true;
-      out6_fadeOut = false;
-      Blink_out5 = false;
-      Blink_out6 = true;
-      out6_on = false;                // damit beim ersten Aufruf im Blinkmode "ein" erfolgt
+                                      // VSig zeigt HL7 z.B. bei BkSig, sonst unüblich (Bsp. Silberhausen Abzw.)
+      VS_GREEN_OFF
+      VS_YELLOW_BLINK
 
       #if defined DEBUG  
         Serial.println("Aspect 2");
@@ -292,34 +255,14 @@ void Run_HL_ASPECT( uint16_t SIGN_addr, uint8_t SIGN_aspect ) {
       break;
 
     case 3:                           // HL7 gelb(blink) - Fahrt auf 40 km/h reduzieren
-      out1_fadeOut = true;
-      out1_fadeOutSet = true;
-      out1_fadeIn = false;
-      out2_fadeOut = true;
-      out2_fadeOutSet = true;
-      out2_fadeIn = false;
-      out3_fadeIn = true;
-      out3_fadeInSet = true;
-      out3_fadeOut = false;
-      out4_fadeOut = true;
-      out4_fadeOutSet = true;
-      out4_fadeIn = false;
-      Blink_out1 = false;
-      Blink_out2 = false;
-      Blink_out3 = true;
-      Blink_out4 = false;
+      RED_OFF
+      GREEN_OFF
+      YEL_TOP_BLINK
+      YEL_BOT_OFF
       fadePause = true;
-      out3_on = false;                // damit beim ersten Aufruf im Blinkmode "ein" erfolgt
-
-      out5_fadeOut = true;            // VSig auch HL7 zeigen lassen
-      out5_fadeOutSet = true;
-      out5_fadeIn = false;
-      out6_fadeIn = true;
-      out6_fadeInSet = true;
-      out6_fadeOut = false;
-      Blink_out5 = false;
-      Blink_out6 = true;
-      out6_on = false;                // damit beim ersten Aufruf im Blinkmode "ein" erfolgt
+                                      // VSig auch HL7 zeigen lassen
+      VS_GREEN_OFF
+      VS_YELLOW_BLINK
 
       #if defined DEBUG  
         Serial.println("Aspect 3");
@@ -327,34 +270,14 @@ void Run_HL_ASPECT( uint16_t SIGN_addr, uint8_t SIGN_aspect ) {
       break;
 
     case 4:                           // HL9a gelb(blink)-gelb - Fahrt mit 40 km/h, 40 km/h erwarten
-      out1_fadeOut = true;
-      out1_fadeOutSet = true;
-      out1_fadeIn = false;
-      out2_fadeOut = true;
-      out2_fadeOutSet = true;
-      out2_fadeIn = false;
-      out3_fadeIn = true;
-      out3_fadeInSet = true;
-      out3_fadeOut = false;
-      out4_fadeIn = true;
-      out4_fadeInSet = true;
-      out4_fadeOut = false;
+      RED_OFF
+      GREEN_OFF
+      YEL_TOP_BLINK
+      YEL_BOT_ON
       fadePause = true;
-      Blink_out1 = false;
-      Blink_out2 = false;
-      Blink_out3 = true;
-      Blink_out4 = false;
-      out3_on = false;                // damit beim ersten Aufruf im Blinkmode "ein" erfolgt
-
-      out5_fadeOut = true;            // VSig zeigt HL7
-      out5_fadeOutSet = true;
-      out5_fadeIn = false;
-      out6_fadeIn = true;
-      out6_fadeInSet = true;
-      out6_fadeOut = false;
-      Blink_out5 = false;
-      Blink_out6 = true;
-      out6_on = false;                // damit beim ersten Aufruf im Blinkmode "ein" erfolgt
+                                      // VSig zeigt HL7
+      VS_GREEN_OFF
+      VS_YELLOW_BLINK
 
       #if defined DEBUG  
         Serial.println("Aspect 4");
@@ -362,32 +285,14 @@ void Run_HL_ASPECT( uint16_t SIGN_addr, uint8_t SIGN_aspect ) {
       break;
 
     case 5:                           // HL10 gelb-oben - Halt erwarten
-      out1_fadeOut = true;
-      out1_fadeOutSet = true;
-      out1_fadeIn = false;
-      out2_fadeOut = true;
-      out2_fadeOutSet = true;
-      out2_fadeIn = false;
-      out3_fadeIn = true;
-      out3_fadeInSet = true;
-      out3_fadeOut = false;
-      out4_fadeOut = true;
-      out4_fadeOutSet = true;
-      out4_fadeIn = false;
+      RED_OFF
+      GREEN_OFF
+      YEL_TOP_ON
+      YEL_BOT_OFF
       fadePause = true;
-      Blink_out1 = false;
-      Blink_out2 = false;
-      Blink_out3 = false;
-      Blink_out4 = false;
-
-      out5_fadeIn = true;             // wenn es ESig, dann zeigt Vorsignal HL1
-      out5_fadeInSet = true;
-      out5_fadeOut = false;
-      out6_fadeOut = true;
-      out6_fadeOutSet = true;
-      out6_fadeIn = false;
-      Blink_out5 = false;
-      Blink_out6 = false;
+                                      // wenn es ESig, dann zeigt Vorsignal HL1
+      VS_GREEN_ON
+      VS_YELLOW_OFF
 
       #if defined DEBUG  
         Serial.println("Aspect 5");
@@ -395,33 +300,14 @@ void Run_HL_ASPECT( uint16_t SIGN_addr, uint8_t SIGN_aspect ) {
       break;
 
     case 6:                           // HL12a gelb-gelb - Fahrt mit 40 km/h, Halt erwarten
-      out1_fadeOut = true;
-      out1_fadeOutSet = true;
-      out1_fadeIn = false;
-      out2_fadeOut = true;
-      out2_fadeOutSet = true;
-      out2_fadeIn = false;
-      out3_fadeIn = true;
-      out3_fadeInSet = true;
-      out3_fadeOut = false;
-      out4_fadeIn = true;
-      out4_fadeInSet = true;
-      out4_fadeOut = false;
+      RED_OFF
+      GREEN_OFF
+      YEL_TOP_ON
+      YEL_BOT_ON
       fadePause = true;
-      Blink_out1 = false;
-      Blink_out2 = false;
-      Blink_out3 = false;
-      Blink_out4 = false;
-
-      out5_fadeOut = true;            // VSig zeigt HL7
-      out5_fadeOutSet = true;
-      out5_fadeIn = false;
-      out6_fadeIn = true;
-      out6_fadeInSet = true;
-      out6_fadeOut = false;
-      Blink_out5 = false;
-      Blink_out6 = true;
-      out6_on = false;                // damit beim ersten Aufruf im Blinkmode "ein" erfolgt
+                                      // VSig zeigt HL7
+      VS_GREEN_OFF
+      VS_YELLOW_BLINK
 
       #if defined DEBUG  
         Serial.println("Aspect 6");
@@ -431,32 +317,14 @@ void Run_HL_ASPECT( uint16_t SIGN_addr, uint8_t SIGN_aspect ) {
     case 7:                           // Option nur, wenn HL7 ... HL12a am Signal nicht genutzt werden, 
                                       // z.B. reduziertes EZMG-Ausfahrsignal mit nur Hp0, HL1, HL3a
                                       // Verdrahtung statt "Gelb oben" dann 2x Weiß für RA12
-      out1_fadeIn = true;
-      out1_fadeInSet = true;
-      out1_fadeOut = false;
-      out2_fadeOut = true;
-      out2_fadeOutSet = true;
-      out2_fadeIn = false;
-      out3_fadeIn = true;
-      out3_fadeInSet = true;
-      out3_fadeOut = false;
-      out4_fadeOut = true;
-      out4_fadeOutSet = true;
-      out4_fadeIn = false;
+      RED_ON
+      GREEN_OFF
+      YEL_TOP_ON
+      YEL_BOT_OFF
       fadePause = true;
-      Blink_out1 = false;
-      Blink_out2 = false;
-      Blink_out3 = false;
-      Blink_out4 = false;
-
-      out5_fadeOut = true;             // VSig zeigt HL10
-      out5_fadeOutSet = true;
-      out5_fadeIn = false;
-      out6_fadeIn = true;
-      out6_fadeInSet = true;
-      out6_fadeOut = false;
-      Blink_out5 = false;
-      Blink_out6 = false;
+                                       // VSig zeigt HL10
+      VS_GREEN_OFF
+      VS_YELLOW_ON
       
       #if defined DEBUG  
         Serial.println("Aspect 7");
@@ -464,31 +332,13 @@ void Run_HL_ASPECT( uint16_t SIGN_addr, uint8_t SIGN_aspect ) {
       break;
 
     default:                            // auch nutzbar für Aspect 8 - alles aus
-      out1_fadeOut = true;
-      out1_fadeOutSet = true;
-      out1_fadeIn = false;
-      out2_fadeOut = true;
-      out2_fadeOutSet = true;
-      out2_fadeIn = false;
-      out3_fadeOut = true;
-      out3_fadeOutSet = true;
-      out3_fadeIn = false;
-      out4_fadeOut = true;
-      out4_fadeOutSet = true;
-      out4_fadeIn = false;
-      Blink_out1 = false;
-      Blink_out2 = false;
-      Blink_out3 = false;
-      Blink_out4 = false;
-
-      out5_fadeOut = true;             // VSig
-      out5_fadeOutSet = true;
-      out5_fadeIn = false;
-      out6_fadeOut = true;
-      out6_fadeOutSet = true;
-      out6_fadeIn = false;
-      Blink_out5 = false;
-      Blink_out6 = false;
+      RED_OFF
+      GREEN_OFF
+      YEL_TOP_OFF
+      YEL_BOT_OFF
+                                       // VSig
+      VS_GREEN_OFF
+      VS_YELLOW_OFF
 
       #if defined DEBUG  
         Serial.println("Aspect default");
